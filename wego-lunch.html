@@ -1,0 +1,41 @@
+<head>
+  <title>wego-lunch</title>
+</head>
+
+<body>
+	<center>
+		<img src="http://0.w3g0.com/assets/carebear/wego/header/logo-wego-retina-54cf15b5f07e6c2463397ad0b7353aef.png" width="88px" />
+		<div>{{> loginButtons}}</div>
+	</center>
+</body>
+
+<template name="lunch">
+{{#if currentUser}}
+	<div class="where-to">
+		<h3>Where to eat?</h3>
+		<ul>
+			{{#each places}}
+				<li>
+					<label><input name="foodplace" type="radio" value="{{place}}" /> {{place}} ({{count}})</label>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div>Total Votes: {{results}} out of {{users}}</div>
+	<div class="top-places">
+		Top 3 Places:
+		<ul>
+			{{#each topPlaces}}
+				<li>{{place}} {{count}}</li>
+			{{/each}}
+		</ul>
+	</div>
+	{{/if}}
+</template>
+
+<template name="manage">
+{{#if isAdmin}}
+	Add User here <br />
+	Add Place here
+{{/if}}
+</template>
