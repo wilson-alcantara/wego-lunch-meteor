@@ -2,6 +2,12 @@ Places = new Mongo.Collection("places");
 Chosen = new Mongo.Collection("chosen");
 
 if (Meteor.isClient) {
+  Deps.autorun(function() {
+    if (Meteor.user()) {
+      Meteor.subscribe("allUsers");
+    }
+  });
+
   Template.lunch.helpers({
     places: function () {
       return Places.find({}, {sort: {place: '1'}});
@@ -39,11 +45,32 @@ if (Meteor.isClient) {
       var user = Meteor.user();
       if (user && user.emails)
         return user.emails[0].address === 'wilson@wego.com';
+    },
+
+    listAllUsers: function () {
+      return Meteor.users.find({}).fetch();
+    },
+
+    listAllPlaces: function () {
+      return Places.find({}, {sort: {place: '1'}});
     }
+
   });
 
   Template.manage.events({
-    // manage event here
+    'click .js-add-place': function(e){
+      e.preventDefault();
+      var newPlace = $('.add-place').val();
+      if (newPlace) {
+        Meteor.call("addPlace", newPlace);
+        $('.add-place').val('');
+      }
+    },
+
+    'click .js-delete-place': function(e){
+      e.preventDefault();
+      Meteor.call("deletePlace", $(this)[0].place);
+    }
   });
 
   Router.route('/', function () {
@@ -61,6 +88,9 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
+    Meteor.publish("allUsers", function() {
+      return Meteor.users.find({}, {fields: {"emails.address": 1}});
+    });
   });
 }
 
@@ -95,5 +125,18 @@ Meteor.methods({
     return allPlaces.map(function (lugar) {
       Places.update({place: lugar.place}, { $set: {count: Chosen.find({chosen: lugar.place}).count()} });
     });
+  },
+
+  addPlace: function (newPlace) {
+    Places.insert({
+      place: newPlace,
+      count: 0,
+      createdAt: new Date()
+    });
+  },
+
+  deletePlace: function (place) {
+    Places.remove({ place: place });
   }
+
 });

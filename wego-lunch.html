@@ -35,7 +35,22 @@
 
 <template name="manage">
 {{#if isAdmin}}
-	Add User here <br />
-	Add Place here
+	<div class="users">
+		<div>List of Users: <input type="text" class="add-user" placeholder="Add user" value=""> <a href="" class="js-add-user">add</a></div>
+		<ul>
+		{{#each listAllUsers}}
+			<li>{{emails.[0].address}}</li>
+		{{/each}}
+		</ul>
+	</div>
+
+	<div class="places">
+		<div>List of Places: <input type="text" class="add-place" placeholder="Add place" value=""> <a href="" class="js-add-place">add</a></div>
+		<ul>
+		{{#each listAllPlaces}}
+			<li><a href="#" class="js-delete-place" data-place="{{place}}">[Delete]</a> {{place}}</li>
+		{{/each}}
+		</ul>
+	</div>
 {{/if}}
 </template>

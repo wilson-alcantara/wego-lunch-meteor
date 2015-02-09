@@ -6,7 +6,7 @@ ul {
 }
 li {
 	cursor: pointer;
-	display: inline-block;
+	display: block;
 	margin: 0 0 .5em;
 }
 label {
@@ -14,7 +14,6 @@ label {
 	display: block;
 	width: 20em;
 }
-.top-places li {
-	display: block;
-	margin: 0 0 .5em;
+.where-to li {
+	display: inline-block;
 }
