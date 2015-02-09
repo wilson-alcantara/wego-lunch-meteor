@@ -17,3 +17,6 @@ label {
 .where-to li {
 	display: inline-block;
 }
+.top-places {
+	margin-top: 1em;
+}
