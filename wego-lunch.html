@@ -34,11 +34,13 @@
 
 <template name="manage">
 {{#if isAdmin}}
+
+	<div class="reset-votes"> Reset Votes <a href="#" class="js-reset-votes">here</a> ({{results}})</div>
 	<div class="users">
 		<div>List of Users: <input type="text" class="add-user" placeholder="Add user" value=""> <a href="" class="js-add-user">add</a></div>
 		<ul>
 		{{#each listAllUsers}}
-			<li>{{emails.[0].address}}</li>
+			<li><a href="#" class="js-delete-user">[Delete]</a> {{emails.[0].address}}</li>
 		{{/each}}
 		</ul>
 	</div>
@@ -47,7 +49,7 @@
 		<div>List of Places: <input type="text" class="add-place" placeholder="Add place" value=""> <a href="" class="js-add-place">add</a></div>
 		<ul>
 		{{#each listAllPlaces}}
-			<li><a href="#" class="js-delete-place" data-place="{{place}}">[Delete]</a> {{place}}</li>
+			<li><a href="#" class="js-delete-place">[Delete]</a> {{place}}</li>
 		{{/each}}
 		</ul>
 	</div>

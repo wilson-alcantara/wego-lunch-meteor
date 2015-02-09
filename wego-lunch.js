@@ -5,6 +5,8 @@ if (Meteor.isClient) {
   Deps.autorun(function() {
     if (Meteor.user()) {
       Meteor.subscribe("allUsers");
+      Meteor.subscribe("allPlaces");
+      Meteor.subscribe("allVotes");
     }
   });
 
@@ -53,6 +55,10 @@ if (Meteor.isClient) {
 
     listAllPlaces: function () {
       return Places.find({}, {sort: {place: '1'}});
+    },
+
+    results: function () {
+      return Chosen.find({}).count();
     }
 
   });
@@ -67,9 +73,28 @@ if (Meteor.isClient) {
       }
     },
 
+    'click .js-add-user': function(e){
+      e.preventDefault();
+      var newUser = $('.add-user').val();
+      if (newUser) {
+        Meteor.call("addUser", newUser);
+        $('.add-user').val('');
+      }
+    },
+
     'click .js-delete-place': function(e){
       e.preventDefault();
       Meteor.call("deletePlace", $(this)[0].place);
+    },
+
+    'click .js-reset-votes': function(e){
+      e.preventDefault();
+      Meteor.call("resetVotes");
+    },
+
+    'click .js-delete-user': function(e){
+      e.preventDefault();
+      Meteor.call("deleteUser", $(this)[0]._id);
     }
   });
 
@@ -90,6 +115,14 @@ if (Meteor.isServer) {
   Meteor.startup(function () {
     Meteor.publish("allUsers", function() {
       return Meteor.users.find({}, {fields: {"emails.address": 1}});
+    });
+
+    Meteor.publish("allPlaces", function() {
+      return Places.find({});
+    });
+
+    Meteor.publish("allVotes", function() {
+      return Chosen.find({});
     });
   });
 }
@@ -137,6 +170,20 @@ Meteor.methods({
 
   deletePlace: function (place) {
     Places.remove({ place: place });
-  }
+  },
 
+  resetVotes: function () {
+    Chosen.remove({});
+  },
+
+  addUser: function (newUser) {
+    Accounts.createUser({
+      email : newUser,
+      password : 'password'
+    });
+  },
+
+  deleteUser: function (userId) {
+    Meteor.users.remove({_id: userId});
+  }
 });
