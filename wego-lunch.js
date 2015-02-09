@@ -105,10 +105,6 @@ if (Meteor.isClient) {
   Router.route('/m', function () {
     this.render('manage');
   });
-
-  Accounts.config({
-    forbidClientAccountCreation: true
-  });
 }
 
 if (Meteor.isServer) {
@@ -124,6 +120,10 @@ if (Meteor.isServer) {
     Meteor.publish("allVotes", function() {
       return Chosen.find({});
     });
+  });
+
+  Accounts.config({
+    forbidClientAccountCreation: true
   });
 }
 
