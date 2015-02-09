@@ -121,10 +121,6 @@ if (Meteor.isServer) {
       return Chosen.find({});
     });
   });
-
-  Accounts.config({
-    forbidClientAccountCreation: true
-  });
 }
 
 Meteor.methods({
